@@ -435,15 +435,33 @@
     toast('Request saved — reference ' + ref, '<path d="m4.5 12.5 4.5 4.5L19.5 6.5"/>');
   }
 
+  function remoteErrMsg(err) {
+    var c = err && err.code || '';
+    if (c === 'permission-denied') return 'The clinic database refused it (Firestore rules are not published yet, or please log out and log in again).';
+    if (c === 'unavailable' || c === 'failed-precondition' || c === 'not-found') return 'The clinic database is not reachable (the Firestore Database may not be created yet).';
+    if (c === 'unauthenticated') return 'You are not logged in online. Please log out, log in again, then try again.';
+    return 'Could not reach the clinic database.';
+  }
+  function setSyncNote(msg) {
+    var el = $('#syncNote');
+    if (!el) return;
+    if (!msg) { el.classList.add('hidden'); return; }
+    $('#syncMsg').textContent = msg + ' Your booking is saved on this device — please call (032) 253 3206 to confirm.';
+    el.classList.remove('hidden');
+  }
   function saveBookingRemote(b) {
+    setSyncNote('');
     var u = fbAuth && fbAuth.currentUser;
-    if (!fbDb || !u) return;
+    if (!fbDb) { setSyncNote('Online booking is not connected (Firestore did not load).'); return Promise.resolve(false); }
+    if (!u) { setSyncNote(remoteErrMsg({ code: 'unauthenticated' })); return Promise.resolve(false); }
     var doc = {};
-    for (var k in b) doc[k] = b[k];
+    for (var k in b) if (k !== 'synced' && b[k] !== undefined) doc[k] = b[k];
     doc.uid = u.uid;
     doc.createdAt = window.firebase.firestore.FieldValue.serverTimestamp();
-    fbDb.collection('bookings').doc(b.ref).set(doc).catch(function () {
-      toast('Saved on this device, but the clinic could not be reached online. Please call (032) 253 3206 to confirm.', '<path d="M12 8.5v4.5M12 16.4v.2"/><circle cx="12" cy="12" r="8.5"/>');
+    return fbDb.collection('bookings').doc(b.ref).set(doc).then(function () { return true; }).catch(function (err) {
+      console.error('Booking save failed:', err);
+      setSyncNote(remoteErrMsg(err) + ' [' + ((err && err.code) || 'error') + ']');
+      return false;
     });
   }
 
@@ -1132,6 +1150,8 @@
       }
       if (e.key === 'Escape' && $('#adminModal').classList.contains('on')) $('#adminModal').classList.remove('on');
     });
+
+    $('#syncRetry').addEventListener('click', function () { if (lastBooking) saveBookingRemote(lastBooking).then(function (ok) { if (ok) toast('Sent to the clinic.'); }); });
 
     // save receipt as image
     $('#saveReceipt').addEventListener('click', function () { if (lastBooking) saveReceiptPng(lastBooking); });
