@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Only the clinic admin account (email + password sign-in) counts as admin.
+    function isAdmin() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'password'
+        && request.auth.token.email == 'admin@gmail.com';
+    }
+
+    match /bookings/{ref} {
+      // a signed-in patient can create their own booking (starts as pending)
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'pending';
+
+      // patients read their own bookings, admin reads all
+      allow read: if isAdmin()
+                  || (request.auth != null && resource.data.uid == request.auth.uid);
+
+      // admin can change anything; a patient can only cancel their own booking
+      allow update: if isAdmin()
+                    || (request.auth != null
+                        && resource.data.uid == request.auth.uid
+                        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
+                        && request.resource.data.status == 'cancelled');
+
+      allow delete: if false;
+    }
+  }
+}

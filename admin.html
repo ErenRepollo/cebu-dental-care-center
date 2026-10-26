@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin · Cebu Dental Care Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style_a.css">
+<link rel="stylesheet" href="assets/css/style_b.css">
+<link rel="stylesheet" href="assets/css/style_c.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230b5d55'/><path d='M50 26c-9 0-14 5-14 13 0 6 2 9 2 15 0 9 3 20 7 20 3 0 3-9 5-9s2 9 5 9c4 0 7-11 7-20 0-6 2-9 2-15 0-8-5-13-14-13z' fill='%23eafff9'/></svg>">
+<style>
+  body{min-height:100vh}
+  .adm-wrap{max-width:1180px;margin-inline:auto;padding:0 20px}
+
+  /* gate (loading / login / denied) */
+  .adm-gate{min-height:100vh;display:grid;place-items:center;padding:20px}
+  .adm-card{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line);border-radius:24px;padding:28px 24px;box-shadow:var(--shadow-md)}
+  .adm-card h1{font-size:1.5rem;font-weight:800;letter-spacing:-.01em;margin:10px 0 6px}
+  .adm-card h1 .serif{color:var(--brand);font-size:1.12em;font-weight:400}
+  .adm-card p{color:var(--ink-soft);font-size:.92rem;line-height:1.55;margin:0}
+  .adm-eyebrow{display:flex;align-items:center;gap:9px;font-size:.66rem;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-soft);
+    font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .adm-eyebrow i{width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.18)}
+  .adm-card .field label{font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-soft);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  .adm-card .btn{width:100%;justify-content:center;margin-top:16px;border-radius:999px;padding:14px}
+  .adm-card .btn.alt{margin-top:10px}
+  .adm-spin{width:34px;height:34px;border-radius:50%;border:3px solid var(--line);border-top-color:var(--brand);animation:spin .8s linear infinite;margin:0 auto}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* top bar */
+  .adm-top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line-2)}
+  .adm-top .adm-wrap{display:flex;align-items:center;justify-content:space-between;gap:14px;height:68px}
+  .adm-brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .adm-brand .brand-mark{flex:0 0 auto}
+  .adm-brand b{display:block;font-size:.98rem;white-space:nowrap}
+  .adm-pill{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;background:var(--mint-soft);color:var(--brand);padding:3px 8px;border-radius:999px;margin-left:6px}
+  .adm-actions{display:flex;align-items:center;gap:8px}
+  .adm-who{font-size:.78rem;color:var(--muted);font-weight:600;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+  /* page */
+  .adm-main{padding:28px 0 60px}
+  .adm-title{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .adm-title h1{font-size:1.7rem;font-weight:800;letter-spacing:-.02em;margin:0}
+  .adm-title p{margin:4px 0 0;color:var(--muted);font-size:.9rem}
+  .adm-live{display:inline-flex;align-items:center;gap:7px;font-size:.72rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .adm-live i{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.16)}
+
+  .adm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:20px}
+  .adm-stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;box-shadow:var(--shadow-sm)}
+  .adm-stat b{display:block;font-size:1.8rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  .adm-stat span{font-size:.74rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+  .adm-stat.warn b{color:#b45309}
+  html[data-theme="dark"] .adm-stat.warn b{color:var(--gold)}
+  .adm-stat.ok b{color:var(--brand)}
+
+  .adm-tools{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;align-items:center}
+  .adm-tools .input{width:auto;min-width:0}
+  .adm-tools .grow{flex:1;min-width:220px}
+  .adm-count{font-size:.8rem;color:var(--muted);font-weight:700;margin:14px 2px 8px}
+
+  .adm-list{display:grid;gap:10px}
+  .bk{display:grid;grid-template-columns:1.25fr 1.3fr 1fr auto auto;gap:16px;align-items:center;background:var(--surface);
+    border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow-sm)}
+  .bk.st-confirmed{border-left-color:var(--brand)}
+  .bk.st-completed{border-left-color:#64748b}
+  .bk.st-cancelled{border-left-color:#dc2626;opacity:.72}
+  .bk b{display:block;font-size:.95rem;line-height:1.3}
+  .bk span{display:block;font-size:.8rem;color:var(--ink-soft);line-height:1.45;overflow-wrap:anywhere}
+  .bk a{color:var(--brand);font-weight:700}
+  .bk .note{font-style:italic;color:var(--muted)}
+  .bk .ref{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.72rem;color:var(--muted);letter-spacing:.04em}
+  .badge{display:inline-block!important;font-size:.66rem!important;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;
+    background:rgba(240,180,41,.16);color:#b45309!important;white-space:nowrap}
+  html[data-theme="dark"] .badge{color:var(--gold)!important}
+  .badge.confirmed{background:var(--mint-soft);color:var(--brand)!important}
+  .badge.completed{background:rgba(100,116,139,.16);color:#475569!important}
+  html[data-theme="dark"] .badge.completed{color:#cbd5e1!important}
+  .badge.cancelled{background:rgba(220,38,38,.12);color:#dc2626!important}
+  .c-act{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+  .adm-empty{text-align:center;padding:46px 20px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:18px;font-size:.92rem}
+  .adm-alert{margin-top:20px;background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.3);color:var(--ink);border-radius:14px;padding:14px 16px;font-size:.88rem;line-height:1.55}
+  .adm-alert b{color:#dc2626}
+
+  .adm-modal{position:fixed;inset:0;z-index:90;background:rgba(4,14,12,.6);backdrop-filter:blur(6px);display:grid;place-items:center;padding:16px;overflow:auto}
+  .adm-check{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:.86rem;color:var(--ink-soft);line-height:1.45;cursor:pointer}
+  .adm-check input{margin-top:3px}
+  .adm-toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:100;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:12px;font-size:.85rem;font-weight:700;box-shadow:var(--shadow-md)}
+
+  @media(max-width:980px){
+    .bk{grid-template-columns:1fr 1fr;gap:12px 16px}
+    .c-act{justify-content:flex-start;grid-column:1/-1}
+    .adm-stats{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:560px){
+    .bk{grid-template-columns:1fr}
+    .adm-who{display:none}
+    .adm-brand b{font-size:.9rem}
+    .adm-tools .input{width:100%}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== gate: loading / staff login / access denied ===== -->
+<div class="adm-gate" id="gateLoading">
+  <div class="adm-card" style="text-align:center"><div class="adm-spin"></div><p style="margin-top:16px">Checking your account…</p></div>
+</div>
+
+<div class="adm-gate hidden" id="gateLogin">
+  <div class="adm-card">
+    <div class="adm-eyebrow"><i></i>Staff only</div>
+    <h1>Admin <span class="serif">sign in</span></h1>
+    <p>Log in with the clinic admin account to see today's schedule and booking requests.</p>
+    <form id="loginForm" novalidate>
+      <div class="field"><label for="lEmail">Email</label><input class="input" id="lEmail" type="email" autocomplete="email" placeholder="admin@example.com"></div>
+      <div class="field"><label for="lPass">Password</label><input class="input" id="lPass" type="password" autocomplete="current-password" placeholder="Password"></div>
+      <div class="err-msg" id="lErr" role="alert" style="margin-top:12px"></div>
+      <button class="btn btn-primary" type="submit" id="lBtn">Log in</button>
+    </form>
+    <a class="btn btn-ghost alt" href="index.html">Back to website</a>
+  </div>
+</div>
+
+<div class="adm-gate hidden" id="gateDenied">
+  <div class="adm-card">
+    <div class="adm-eyebrow"><i style="background:#dc2626;box-shadow:0 0 0 3px rgba(220,38,38,.18)"></i>Access denied</div>
+    <h1>This isn't a <span class="serif">staff account</span></h1>
+    <p><b id="deniedEmail"></b> doesn't have access to the admin dashboard. Log out and sign in with the clinic admin account.</p>
+    <button class="btn btn-primary" id="deniedOut" type="button">Log out</button>
+    <a class="btn btn-ghost alt" href="index.html">Back to website</a>
+  </div>
+</div>
+
+<!-- ===== dashboard ===== -->
+<div id="app" class="hidden">
+  <header class="adm-top">
+    <div class="adm-wrap">
+      <div class="adm-brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5c-2.6 0-4 1.5-4 3.9 0 1.7.6 2.6.6 4.3 0 2.6.8 5.8 2 5.8.9 0 .9-2.6 1.4-2.6s.5 2.6 1.4 2.6c1.2 0 2-3.2 2-5.8 0-1.7.6-2.6.6-4.3 0-2.4-1.4-3.9-4-3.9Z"/><path d="M9.2 7.6c.7-.5 1.6-.7 2.8-.7"/></svg>
+        </span>
+        <div><b>Cebu Dental Care Center<span class="adm-pill">Admin</span></b></div>
+      </div>
+      <div class="adm-actions">
+        <span class="adm-who" id="whoami"></span>
+        <a class="btn btn-ghost btn-sm" href="index.html">View website</a>
+        <button class="icon-btn" id="themeBtn" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20.5 14.8A8.5 8.5 0 0 1 9.2 3.5a8.5 8.5 0 1 0 11.3 11.3Z"/></svg>
+        </button>
+        <button class="btn btn-soft btn-sm" id="logoutBtn" type="button">Log out</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="adm-main">
+    <div class="adm-wrap">
+      <div class="adm-title">
+        <div>
+          <h1>Booking requests</h1>
+          <p>Confirm, complete or cancel appointments. Patients are contacted by phone to confirm.</p>
+        </div>
+        <span class="adm-live"><i></i>Live</span>
+      </div>
+
+      <div class="adm-alert hidden" id="dbErr"></div>
+
+      <div class="adm-stats">
+        <div class="adm-stat"><b id="stToday">0</b><span>Today</span></div>
+        <div class="adm-stat warn"><b id="stPending">0</b><span>Needs confirming</span></div>
+        <div class="adm-stat ok"><b id="stConfirmed">0</b><span>Confirmed</span></div>
+        <div class="adm-stat"><b id="stTotal">0</b><span>All requests</span></div>
+      </div>
+
+      <div class="adm-tools">
+        <input class="input grow" id="fSearch" type="search" placeholder="Search name, phone, email or reference" aria-label="Search bookings">
+        <select class="input" id="fRange" aria-label="Date range">
+          <option value="upcoming">Upcoming</option>
+          <option value="today">Today</option>
+          <option value="past">Past</option>
+          <option value="all">All dates</option>
+        </select>
+        <select class="input" id="fStatus" aria-label="Status">
+          <option value="all">All statuses</option>
+          <option value="pending">Pending</option>
+          <option value="confirmed">Confirmed</option>
+          <option value="completed">Completed</option>
+          <option value="cancelled">Cancelled</option>
+        </select>
+        <button class="btn btn-soft btn-sm" id="csvBtn" type="button">Export CSV</button>
+      </div>
+
+      <div class="adm-count" id="fCount"></div>
+      <div class="adm-list" id="list"></div>
+    </div>
+  </main>
+</div>
+
+<div class="adm-modal hidden" id="updModal" role="dialog" aria-modal="true" aria-labelledby="updTitle">
+  <div class="adm-card" style="max-width:480px">
+    <div class="adm-eyebrow"><i></i>Update patient</div>
+    <h1 id="updTitle">Confirm appointment</h1>
+    <p id="updWho"></p>
+    <div class="field">
+      <label for="updNote">Message to patient (optional)</label>
+      <textarea class="input" id="updNote" rows="4" maxlength="600" placeholder="e.g. Please arrive 10 minutes early and bring a valid ID."></textarea>
+    </div>
+    <label class="adm-check"><input type="checkbox" id="updEmail" checked><span id="updEmailTxt">Email the patient this update</span></label>
+    <div class="err-msg" id="updErr" role="alert" style="margin-top:12px"></div>
+    <button class="btn btn-primary" id="updGo" type="button">Confirm &amp; send</button>
+    <button class="btn btn-ghost alt" id="updCancel" type="button">Close</button>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var FIREBASE_CONFIG = {
+    apiKey: 'AIzaSyCLB6d4iiSid4dmGa09l2SMo47rKKC0CtY',
+    authDomain: 'cebu-dental-care-center-f7017.firebaseapp.com',
+    projectId: 'cebu-dental-care-center-f7017',
+    storageBucket: 'cebu-dental-care-center-f7017.firebasestorage.app',
+    messagingSenderId: '901285525297',
+    appId: '1:901285525297:web:da20d945aaa1d6ddf2a210',
+    measurementId: 'G-7B0W5JXQFS'
+  };
+  var ADMIN_EMAIL = 'admin@gmail.com'; // must match the email in firestore.rules
+
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  var DOW = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  function $(s) { return document.querySelector(s); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function todayISO() { return iso(new Date()); }
+  function parseISO(s) { var p = String(s).split('-'); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function prettyDate(s) { var d = parseISO(s); return DOW[d.getDay()] + ', ' + MONTHS[d.getMonth()] + ' ' + d.getDate() + ', ' + d.getFullYear(); }
+  function to12(t) {
+    var p = String(t).split(':'), h = +p[0], ap = h >= 12 ? 'PM' : 'AM', hh = h % 12 || 12;
+    return hh + ':' + p[1] + ' ' + ap;
+  }
+  function toast(msg) {
+    var el = document.createElement('div');
+    el.className = 'adm-toast'; el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(function () { el.remove(); }, 2600);
+  }
+
+  /* ---------- theme ---------- */
+  (function () {
+    var saved = null;
+    try { saved = localStorage.getItem('cdcc_theme'); } catch (e) {}
+    if (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) saved = 'dark';
+    document.documentElement.setAttribute('data-theme', saved || 'light');
+  })();
+  $('#themeBtn').addEventListener('click', function () {
+    var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('cdcc_theme', next); } catch (e) {}
+  });
+
+  // opened from a booking QR code: /admin.html?ref=CDCC-XXXX-123
+  (function () {
+    var q = ''; try { q = new URLSearchParams(window.location.search).get('ref') || ''; } catch (e) {}
+    if (q) { $('#fSearch').value = q; $('#fRange').value = 'all'; }
+  })();
+
+  /* ---------- gates ---------- */
+  function show(which) {
+    ['gateLoading', 'gateLogin', 'gateDenied', 'app'].forEach(function (id) {
+      $('#' + id).classList.toggle('hidden', id !== which);
+    });
+  }
+
+  if (!window.firebase) {
+    show('gateLogin');
+    var le = $('#lErr'); le.textContent = 'Could not load Firebase. Check your internet connection and refresh.'; le.classList.add('on');
+    return;
+  }
+  window.firebase.initializeApp(FIREBASE_CONFIG);
+  var auth = window.firebase.auth();
+  var db = window.firebase.firestore();
+
+  function authMsg(err) {
+    var c = err && err.code || '';
+    if (c === 'auth/invalid-credential' || c === 'auth/wrong-password' || c === 'auth/user-not-found') return 'Incorrect email or password.';
+    if (c === 'auth/invalid-email') return 'Enter a valid email address.';
+    if (c === 'auth/too-many-requests') return 'Too many attempts. Please wait a moment and try again.';
+    if (c === 'auth/network-request-failed') return 'Network problem. Check your internet connection.';
+    if (c === 'auth/unauthorized-domain') return 'This website address is not authorized in Firebase yet (Authentication → Settings → Authorized domains).';
+    return 'Could not log in. Please try again.';
+  }
+
+  $('#loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = $('#lEmail').value.trim(), pw = $('#lPass').value, err = $('#lErr');
+    err.classList.remove('on');
+    if (!email || !pw) { err.textContent = 'Enter your admin email and password.'; err.classList.add('on'); return; }
+    var btn = $('#lBtn'); btn.disabled = true;
+    auth.signInWithEmailAndPassword(email, pw).then(function () { btn.disabled = false; })
+      .catch(function (ex) { btn.disabled = false; err.textContent = authMsg(ex); err.classList.add('on'); });
+  });
+
+  function logout() { auth.signOut(); }
+  $('#logoutBtn').addEventListener('click', logout);
+  $('#deniedOut').addEventListener('click', logout);
+
+  var all = [], unsub = null;
+
+  auth.onAuthStateChanged(function (u) {
+    if (unsub) { unsub(); unsub = null; }
+    all = [];
+    if (!u) { show('gateLogin'); return; }
+    var isAdmin = !!u.email && u.email.toLowerCase() === ADMIN_EMAIL &&
+      u.providerData.some(function (p) { return p.providerId === 'password'; });
+    if (!isAdmin) { $('#deniedEmail').textContent = u.email || 'This account'; show('gateDenied'); return; }
+    $('#whoami').textContent = u.email;
+    show('app');
+    listen();
+  });
+
+  /* ---------- data ---------- */
+  function listen() {
+    var box = $('#dbErr'); box.classList.add('hidden');
+    unsub = db.collection('bookings').onSnapshot(function (snap) {
+      box.classList.add('hidden');
+      all = snap.docs.map(function (d) { var o = d.data(); o.ref = d.id; if (!o.status) o.status = 'pending'; return o; });
+      render();
+    }, function (err) {
+      var msg;
+      if (err && err.code === 'permission-denied') {
+        msg = '<b>Firestore blocked this request.</b> Publish the rules from <code>firestore.rules</code> in Firebase Console → Firestore Database → Rules, and make sure you are logged in as the admin account.';
+      } else if (err && (err.code === 'failed-precondition' || err.code === 'unavailable')) {
+        msg = '<b>Firestore is not reachable.</b> Make sure the Firestore Database is created (Firebase Console → Build → Firestore Database → Create database).';
+      } else {
+        msg = '<b>Could not load bookings.</b> ' + esc(err && err.message || '');
+      }
+      box.innerHTML = msg; box.classList.remove('hidden');
+    });
+  }
+
+  function setStatus(ref, status, quiet) {
+    return db.collection('bookings').doc(ref).update({
+      status: status,
+      updatedAt: window.firebase.firestore.FieldValue.serverTimestamp()
+    }).then(function () { if (!quiet) toast('Marked as ' + status + '.'); return true; })
+      .catch(function () { toast('Could not update. Check Firestore rules / connection.'); return false; });
+  }
+
+  // asks the server (api/notify.js) to email the patient
+  function notifyPatient(b, status, note) {
+    return auth.currentUser.getIdToken().then(function (tok) {
+      return fetch('/api/notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+        body: JSON.stringify({
+          status: status, note: note, siteUrl: window.location.origin,
+          booking: { ref: b.ref, name: b.name, email: b.email, phone: b.phone, serviceName: b.serviceName, doctorName: b.doctorName, date: b.date, time: b.time, dur: b.dur }
+        })
+      });
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error(j.error || ('HTTP ' + r.status));
+        return j;
+      });
+    });
+  }
+
+  /* ---------- update modal (status + optional message + email) ---------- */
+  var upd = null;
+  var UPD_TEXT = {
+    confirmed: ['Confirm appointment', 'Confirm &amp; send'],
+    cancelled: ['Cancel appointment', 'Cancel &amp; send'],
+    completed: ['Mark as completed', 'Complete &amp; send']
+  };
+  function openUpd(b, act) {
+    upd = { b: b, act: act };
+    var t = UPD_TEXT[act];
+    $('#updTitle').textContent = t[0];
+    $('#updWho').textContent = b.name + ' · ' + b.serviceName + ' · ' + prettyDate(b.date) + ' ' + to12(b.time);
+    $('#updNote').value = '';
+    $('#updErr').classList.remove('on');
+    var has = !!b.email;
+    $('#updEmail').checked = has; $('#updEmail').disabled = !has;
+    $('#updEmailTxt').textContent = has
+      ? 'Email ' + b.email + (act === 'confirmed' ? ' with the receipt, QR code and calendar link' : '')
+      : 'No email address on this booking';
+    $('#updGo').innerHTML = b.status === act ? 'Send email' : t[1];
+    $('#updGo').disabled = false;
+    $('#updModal').classList.remove('hidden');
+    setTimeout(function () { $('#updNote').focus(); }, 50);
+  }
+  function closeUpd() { $('#updModal').classList.add('hidden'); upd = null; }
+  $('#updCancel').addEventListener('click', closeUpd);
+  $('#updModal').addEventListener('click', function (e) { if (e.target.id === 'updModal') closeUpd(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && upd) closeUpd(); });
+  $('#updGo').addEventListener('click', function () {
+    if (!upd) return;
+    var b = upd.b, act = upd.act, note = $('#updNote').value.trim(), send = $('#updEmail').checked;
+    var btn = $('#updGo'); btn.disabled = true;
+    var step = b.status === act ? Promise.resolve(true) : setStatus(b.ref, act, true);
+    step.then(function (ok) {
+      if (!ok) { btn.disabled = false; return; }
+      if (!send) { toast('Marked as ' + act + '.'); closeUpd(); return; }
+      return notifyPatient(b, act, note).then(function () {
+        toast('Marked as ' + act + ' — patient emailed.'); closeUpd();
+      }).catch(function (err) {
+        // the status change already went through; only the email failed
+        $('#updErr').textContent = 'Status saved, but the email failed: ' + err.message;
+        $('#updErr').classList.add('on');
+        btn.disabled = false; btn.innerHTML = 'Try sending again'; b.status = act;
+      });
+    });
+  });
+
+  /* ---------- render ---------- */
+  function filtered() {
+    var q = $('#fSearch').value.trim().toLowerCase();
+    var range = $('#fRange').value, st = $('#fStatus').value, t = todayISO();
+    var rows = all.filter(function (b) {
+      if (st !== 'all' && b.status !== st) return false;
+      if (range === 'today' && b.date !== t) return false;
+      if (range === 'upcoming' && b.date < t) return false;
+      if (range === 'past' && b.date >= t) return false;
+      if (q) {
+        var hay = [b.name, b.phone, b.email, b.ref, b.serviceName].join(' ').toLowerCase();
+        if (hay.indexOf(q.replace(/\s+/g, ' ')) === -1 && hay.replace(/\s/g, '').indexOf(q.replace(/\s/g, '')) === -1) return false;
+      }
+      return true;
+    });
+    var asc = range === 'upcoming' || range === 'today';
+    rows.sort(function (a, b) {
+      var c = (a.date + a.time).localeCompare(b.date + b.time);
+      return asc ? c : -c;
+    });
+    return rows;
+  }
+
+  function actions(b) {
+    var r = esc(b.ref), h = '';
+    if (b.status === 'pending') h += '<button class="btn btn-primary btn-sm" data-act="confirmed" data-ref="' + r + '">Confirm</button>';
+    if (b.status === 'confirmed') h += '<button class="btn btn-primary btn-sm" data-act="completed" data-ref="' + r + '">Complete</button>';
+    if (b.status === 'pending' || b.status === 'confirmed') h += '<button class="btn btn-ghost btn-sm" data-act="cancelled" data-ref="' + r + '">Cancel</button>';
+    if (b.status === 'completed') h += '<button class="btn btn-ghost btn-sm" data-act="confirmed" data-ref="' + r + '">Reopen</button>';
+    if (b.status === 'cancelled') h += '<button class="btn btn-soft btn-sm" data-act="pending" data-ref="' + r + '">Restore</button>';
+    if (b.status === 'confirmed' || b.status === 'cancelled' || b.status === 'completed') h += '<button class="btn btn-soft btn-sm" data-act="' + esc(b.status) + '" data-ref="' + r + '">Email patient</button>';
+    return h;
+  }
+
+  function render() {
+    var t = todayISO();
+    $('#stToday').textContent = all.filter(function (b) { return b.date === t && b.status !== 'cancelled'; }).length;
+    $('#stPending').textContent = all.filter(function (b) { return b.status === 'pending'; }).length;
+    $('#stConfirmed').textContent = all.filter(function (b) { return b.status === 'confirmed'; }).length;
+    $('#stTotal').textContent = all.length;
+
+    var rows = filtered();
+    $('#fCount').textContent = rows.length + (rows.length === 1 ? ' booking' : ' bookings') + ' shown';
+    var list = $('#list');
+    if (!rows.length) {
+      list.innerHTML = '<div class="adm-empty">' + (all.length ? 'No bookings match these filters.' : 'No booking requests yet. New ones will appear here automatically.') + '</div>';
+      return;
+    }
+    list.innerHTML = rows.map(function (b) {
+      var phone = String(b.phone || '').replace(/[^\d+]/g, '');
+      return '<article class="bk st-' + esc(b.status) + '">' +
+        '<div><b>' + esc(b.name) + '</b>' +
+          '<span><a href="tel:' + esc(phone) + '">' + esc(b.phone) + '</a></span>' +
+          '<span><a href="mailto:' + esc(b.email) + '">' + esc(b.email) + '</a></span>' +
+          (b.ptype ? '<span>' + esc(b.ptype) + '</span>' : '') + '</div>' +
+        '<div><b>' + esc(b.serviceName) + '</b><span>' + esc(b.doctorName) + '</span>' +
+          (b.notes ? '<span class="note">“' + esc(b.notes) + '”</span>' : '') + '</div>' +
+        '<div><b>' + esc(prettyDate(b.date)) + '</b><span>' + esc(to12(b.time)) + ' · ' + esc(b.dur) + ' min</span><span class="ref">' + esc(b.ref) + '</span></div>' +
+        '<div><span class="badge ' + esc(b.status) + '">' + esc(b.status) + '</span></div>' +
+        '<div class="c-act">' + actions(b) + '</div>' +
+        '</article>';
+    }).join('');
+  }
+
+  ['#fSearch', '#fRange', '#fStatus'].forEach(function (id) {
+    $(id).addEventListener(id === '#fSearch' ? 'input' : 'change', render);
+  });
+  $('#list').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    var act = btn.getAttribute('data-act'), ref = btn.getAttribute('data-ref'), b = null;
+    all.forEach(function (x) { if (x.ref === ref) b = x; });
+    if (!b) return;
+    // restore / reopen: no email, just change the status
+    if (act === 'pending' || (act === 'confirmed' && b.status === 'completed')) { setStatus(ref, act); return; }
+    openUpd(b, act);
+  });
+
+  $('#csvBtn').addEventListener('click', function () {
+    var rows = filtered();
+    if (!rows.length) { toast('Nothing to export.'); return; }
+    var head = ['Reference', 'Status', 'Date', 'Time', 'Treatment', 'Minutes', 'Dentist', 'Patient', 'Phone', 'Email', 'Patient type', 'Notes'];
+    var lines = rows.map(function (b) {
+      return [b.ref, b.status, b.date, b.time, b.serviceName, b.dur, b.doctorName, b.name, b.phone, b.email, b.ptype,
+        String(b.notes || '').replace(/[\r\n]+/g, ' ')].map(function (v) {
+          return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+        }).join(',');
+    });
+    var url = URL.createObjectURL(new Blob([head.join(',') + '\n' + lines.join('\n')], { type: 'text/csv;charset=utf-8' }));
+    var a = document.createElement('a');
+    a.href = url; a.download = 'cebu-dental-bookings.csv'; a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    toast('CSV exported.');
+  });
+})();
+</script>
+</body>
+</html>
