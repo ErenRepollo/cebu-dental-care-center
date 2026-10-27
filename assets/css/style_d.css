@@ -131,3 +131,34 @@ body{-webkit-tap-highlight-color:transparent}
   .float-card .fc-t{font-size:.62rem}
 }
 @media (hover:none){ .gal button:hover img{transform:none} }
+
+/* ---- tidy grids: column counts chosen so every row is full (no orphan cards / holes) ---- */
+.services,.rev-grid{grid-template-columns:repeat(2,1fr)}          /* 10 items = 5 full rows */
+.rev-grid{align-items:stretch}
+.opt-grid{grid-template-columns:repeat(2,1fr)}                     /* 10 options = 5 full rows */
+.team{grid-template-columns:repeat(3,1fr)}                         /* 3 dentists/cards in one row */
+.feat-row{grid-template-columns:repeat(6,1fr)}                     /* 3 items: 3 across · 5 items: 2 + 3 across */
+.feat-row>*{grid-column:span 2}
+.feat-row:has(>:nth-child(5))>:nth-child(-n+2){grid-column:span 3}
+.topic-chips{display:grid;grid-template-columns:repeat(3,auto);justify-content:start}
+.hero .hero-trust:first-of-type{display:grid;grid-template-columns:repeat(2,minmax(0,max-content));justify-content:start}
+.hero-stats{display:grid;grid-template-columns:repeat(4,auto);justify-content:space-between;gap:18px}
+@media (max-width:900px){
+  .team{grid-template-columns:1fr}
+}
+@media (max-width:640px){
+  .services,.rev-grid{grid-template-columns:1fr}
+  .feat-row{grid-template-columns:repeat(2,1fr)}
+  .feat-row>*,.feat-row:has(>:nth-child(5))>:nth-child(-n+2){grid-column:auto}
+  .feat-row>:last-child:nth-child(odd){grid-column:1/-1}
+  .topic-chips{grid-template-columns:repeat(2,1fr)}
+  .topic-chips>:last-child:nth-child(odd){grid-column:1/-1}
+  .f-bottom .links{justify-content:center}
+}
+@media (max-width:520px){
+  .opt-grid{grid-template-columns:1fr}
+  .hero-stats{grid-template-columns:repeat(2,1fr);gap:20px 14px;justify-content:stretch}
+  .hero .hero-trust:first-of-type{grid-template-columns:1fr 1fr;justify-content:stretch}
+  .hero .hero-trust:first-of-type .chip{justify-content:flex-start}
+}
+.rev{margin:0;min-width:0;height:100%}

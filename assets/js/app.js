@@ -866,9 +866,10 @@
       'auth/cancelled-popup-request': 'Google sign-in was cancelled.',
       'auth/popup-blocked': 'Your browser blocked the Google popup. Allow popups for this site and try again.',
       'auth/unauthorized-domain': 'This website address is not authorized in Firebase yet (Authentication → Settings → Authorized domains).',
+      'auth/quota-exceeded': 'Too many emails were sent today. Please try again later or call (032) 253 3206.',
       'auth/operation-not-allowed': 'This sign-in method is not enabled in Firebase yet (Authentication → Sign-in method).'
     };
-    return map[c] || 'Something went wrong. Please try again.';
+    return map[c] || ('Something went wrong' + (c ? ' (' + c + ')' : '') + '. Please try again.');
   }
 
   function setAuthMode(mode) {
@@ -993,7 +994,8 @@
     if (!fbAuth) return;
     if (!validEmail(email) || pw.length < 6) { showAuthErr('Type your email and password above, then tap Resend again.'); return; }
     fbAuth.signInWithEmailAndPassword(email, pw).then(function (cred) {
-      var user = cred.user;
+      return cred.user.reload().then(function () { return cred.user; }, function () { return cred.user; });
+    }).then(function (user) {
       if (!needsVerify(user)) { finishLogin(fbUserToSession(user, 'email'), 'Your email is already confirmed — welcome!'); return; }
       return sendVerify(user).then(function () { return fbAuth.signOut(); }).then(function () {
         $('#resendBtn').classList.add('hidden');
@@ -1042,7 +1044,8 @@
       }
 
       fbAuth.signInWithEmailAndPassword(email, pw).then(function (cred) {
-        var user = cred.user;
+        return cred.user.reload().then(function () { return cred.user; }, function () { return cred.user; });
+      }).then(function (user) {
         if (needsVerify(user)) {
           return fbAuth.signOut().then(function () {
             fbBtn.disabled = false;
