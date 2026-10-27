@@ -33,37 +33,37 @@ function gcalUrl(b) {
 
 function buildEmail(status, b, note, siteUrl) {
   const copy = {
-    confirmed: { subject: `Appointment confirmed — ${shortDate(b.date)}, ${to12(b.time)} (${b.ref})`, color: '#8a6310', title: 'Your appointment is confirmed',
+    confirmed: { subject: `Appointment confirmed — ${shortDate(b.date)}, ${to12(b.time)} (${b.ref})`, color: '#f0c14b', title: 'Your appointment is confirmed',
       lead: `Hi ${esc(b.name)}, good news — the clinic has confirmed your appointment. Your receipt is below.` },
-    cancelled: { subject: `Appointment cancelled (${b.ref})`, color: '#b91c1c', title: 'Your appointment was cancelled',
+    cancelled: { subject: `Appointment cancelled (${b.ref})`, color: '#f87171', title: 'Your appointment was cancelled',
       lead: `Hi ${esc(b.name)}, your appointment request below has been cancelled. You can book a new time on our website or call us.` },
-    completed: { subject: `Thank you for visiting ${CLINIC.name}`, color: '#8a6310', title: 'Thank you for your visit',
+    completed: { subject: `Thank you for visiting ${CLINIC.name}`, color: '#f0c14b', title: 'Thank you for your visit',
       lead: `Hi ${esc(b.name)}, thank you for trusting us with your smile. Here is a summary of your visit.` }
   }[status];
 
   const qrData = `${siteUrl}/admin.html?ref=${encodeURIComponent(b.ref)}`;
   const qrImg = `https://api.qrserver.com/v1/create-qr-code/?size=240x240&margin=10&data=${encodeURIComponent(qrData)}`;
-  const row = (k, v) => `<tr><td style="padding:9px 0;color:#6c807d;font-size:14px;border-bottom:1px dashed #dfe7e4">${k}</td><td style="padding:9px 0;text-align:right;font-weight:700;font-size:14px;border-bottom:1px dashed #dfe7e4">${v}</td></tr>`;
+  const row = (k, v) => `<tr><td style="padding:9px 0;color:#a09479;font-size:14px;border-bottom:1px dashed #3a3220">${k}</td><td style="padding:9px 0;text-align:right;font-weight:700;font-size:14px;color:#f7f0de;border-bottom:1px dashed #3a3220">${v}</td></tr>`;
 
-  const html = `<!doctype html><html><body style="margin:0;background:#f3f6f4;font-family:Segoe UI,Arial,sans-serif;color:#0a1f1c">
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#f3f6f4;padding:24px 12px"><tr><td align="center">
-<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#ffffff;border-radius:18px;overflow:hidden;border:1px solid #e1e9e6">
+  const html = `<!doctype html><html><head><meta name="color-scheme" content="dark light"><meta name="supported-color-schemes" content="dark light"></head><body style="margin:0;background:#050403;font-family:Segoe UI,Arial,sans-serif;color:#f7f0de">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#050403;padding:24px 12px"><tr><td align="center">
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:#15120c;border-radius:20px;overflow:hidden;border:1px solid #4a3a14">
 <tr><td style="background:#0a0907;border-bottom:3px solid #d9ae45;padding:18px 26px"><table role="presentation" cellspacing="0" cellpadding="0"><tr><td style="padding-right:14px"><img src="${esc(siteUrl)}/assets/img/logo-96.png" width="46" height="46" alt="" style="display:block;border-radius:12px"></td><td><div style="font-size:19px;font-weight:800;color:#f3d683">${CLINIC.name}</div><div style="font-size:13px;color:#c9a24a;margin-top:2px">Appointment update</div></td></tr></table></td></tr>
 <tr><td style="padding:26px">
 <h1 style="margin:0 0 8px;font-size:22px;color:${copy.color}">${copy.title}</h1>
-<p style="margin:0 0 18px;font-size:15px;line-height:1.55;color:#3d5250">${copy.lead}</p>
-${note ? `<div style="background:#fbf3dc;border-left:4px solid #d9ae45;border-radius:8px;padding:12px 14px;margin:0 0 18px;font-size:14px;line-height:1.55"><b style="display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#8a6310;margin-bottom:4px">Message from the clinic</b>${esc(note).replace(/\n/g, '<br>')}</div>` : ''}
+<p style="margin:0 0 18px;font-size:15px;line-height:1.55;color:#d3c8aa">${copy.lead}</p>
+${note ? `<div style="background:#221b0c;border-left:4px solid #d9ae45;border-radius:8px;padding:12px 14px;margin:0 0 18px;font-size:14px;line-height:1.55"><b style="display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#f0c14b;margin-bottom:4px">Message from the clinic</b>${esc(note).replace(/\n/g, '<br>')}</div>` : ''}
 ${status === 'confirmed' ? `<div style="text-align:center;margin:6px 0 18px">
-<img src="${qrImg}" width="200" height="200" alt="Booking QR code" style="display:block;margin:0 auto;border:1px solid #e1e9e6;border-radius:12px">
+<img src="${qrImg}" width="200" height="200" alt="Booking QR code" style="display:block;margin:0 auto;background:#ffffff;padding:6px;border:2px solid #d9ae45;border-radius:14px">
 <div style="font-family:Consolas,Menlo,monospace;font-size:20px;font-weight:800;margin-top:10px;letter-spacing:.04em">${esc(b.ref)}</div>
-<div style="font-size:13px;color:#6c807d;margin-top:4px">Show this QR code or reference at the front desk.</div></div>` : `<div style="font-family:Consolas,Menlo,monospace;font-size:16px;font-weight:800;margin:0 0 12px">${esc(b.ref)}</div>`}
+<div style="font-size:13px;color:#a09479;margin-top:4px">Show this QR code or reference at the front desk.</div></div>` : `<div style="font-family:Consolas,Menlo,monospace;font-size:16px;font-weight:800;margin:0 0 12px">${esc(b.ref)}</div>`}
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 6px">
 ${row('Treatment', esc(b.serviceName))}${row('Dentist', esc(b.doctorName))}${row('Date', esc(longDate(b.date)))}${row('Time', esc(to12(b.time)) + ' (PHT)')}${row('Chair time', esc(b.dur) + ' minutes')}${row('Patient', esc(b.name))}${row('Mobile', esc(b.phone))}${row('Status', `<span style="color:${copy.color}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`)}
 </table>
-${status === 'confirmed' ? `<div style="text-align:center;margin:20px 0 4px"><a href="${esc(gcalUrl(b))}" style="display:inline-block;background:#d9ae45;color:#1b1305;text-decoration:none;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px">Add to Google Calendar</a></div>` : ''}
-${status === 'cancelled' ? `<div style="text-align:center;margin:20px 0 4px"><a href="${esc(siteUrl)}/#book" style="display:inline-block;background:#d9ae45;color:#1b1305;text-decoration:none;font-weight:700;font-size:15px;padding:13px 22px;border-radius:999px">Book a new time</a></div>` : ''}
+${status === 'confirmed' ? `<div style="text-align:center;margin:20px 0 4px"><a href="${esc(gcalUrl(b))}" style="display:inline-block;background:#d9ae45;background-image:linear-gradient(135deg,#f3d683,#c8941f);color:#1b1305;text-decoration:none;font-weight:800;font-size:15px;padding:14px 26px;border-radius:999px">Add to Google Calendar</a></div>` : ''}
+${status === 'cancelled' ? `<div style="text-align:center;margin:20px 0 4px"><a href="${esc(siteUrl)}/#book" style="display:inline-block;background:#d9ae45;background-image:linear-gradient(135deg,#f3d683,#c8941f);color:#1b1305;text-decoration:none;font-weight:800;font-size:15px;padding:14px 26px;border-radius:999px">Book a new time</a></div>` : ''}
 </td></tr>
-<tr><td style="padding:16px 26px 24px;border-top:1px solid #eef2f0;font-size:12.5px;line-height:1.6;color:#6c807d;text-align:center">${CLINIC.name} · ${CLINIC.addr}<br>${CLINIC.phone} · ${CLINIC.hours}</td></tr>
+<tr><td style="padding:16px 26px 24px;border-top:1px solid #2a2314;font-size:12.5px;line-height:1.6;color:#a09479;text-align:center">${CLINIC.name} · ${CLINIC.addr}<br>${CLINIC.phone} · ${CLINIC.hours}</td></tr>
 </table></td></tr></table></body></html>`;
 
   const text = [copy.title, '', `Reference: ${b.ref}`, `Treatment: ${b.serviceName}`, `Dentist: ${b.doctorName}`, `Date: ${longDate(b.date)}`,

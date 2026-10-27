@@ -254,11 +254,33 @@
     var p = String(t).split(':'), h = +p[0], ap = h >= 12 ? 'PM' : 'AM', hh = h % 12 || 12;
     return hh + ':' + p[1] + ' ' + ap;
   }
-  function toast(msg) {
+  function toast(msg, kind) {
+    var box = document.getElementById('toasts');
+    if (!box) { box = document.createElement('div'); box.id = 'toasts'; box.className = 'toasts'; box.setAttribute('aria-live', 'polite'); document.body.appendChild(box); }
     var el = document.createElement('div');
-    el.className = 'adm-toast'; el.textContent = msg;
-    document.body.appendChild(el);
-    setTimeout(function () { el.remove(); }, 2600);
+    el.className = 'toast' + (kind === 'out' ? ' out' : '');
+    var ic = kind === 'out'
+      ? '<path d="M9.5 4.5h-3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3M15 8l4 4-4 4M19 12H9.5"/>'
+      : '<path d="m4.5 12.5 4.5 4.5L19.5 6.5"/>';
+    el.innerHTML = '<span class="t-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' + ic + '</svg></span><span class="t-msg"></span><i class="t-bar"></i>';
+    el.querySelector('.t-msg').textContent = msg;
+    box.appendChild(el);
+    var gone = function () { el.classList.add('leave'); setTimeout(function () { el.remove(); }, 320); };
+    el.addEventListener('click', gone);
+    setTimeout(gone, 3200);
+  }
+  function askLogout() {
+    return new Promise(function (resolve) {
+      var w = document.createElement('div'); w.className = 'dlg'; w.setAttribute('role', 'alertdialog'); w.setAttribute('aria-modal', 'true');
+      w.innerHTML = '<div class="dlg-card"><span class="dlg-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 4.5h-3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3M15 8l4 4-4 4M19 12H9.5"/></svg></span><h3 class="dlg-t">Log out?</h3><p class="dlg-m">You will need to sign in again with the clinic admin account.</p><div class="dlg-act"><button type="button" class="btn btn-ghost dlg-no">Stay logged in</button><button type="button" class="btn btn-primary dlg-yes">Log out</button></div></div>';
+      function done(v) { document.removeEventListener('keydown', key, true); w.classList.add('leave'); setTimeout(function () { w.remove(); }, 200); resolve(v); }
+      function key(e) { if (e.key === 'Escape') done(false); }
+      w.addEventListener('click', function (e) { if (e.target === w) done(false); });
+      w.querySelector('.dlg-no').addEventListener('click', function () { done(false); });
+      w.querySelector('.dlg-yes').addEventListener('click', function () { done(true); });
+      document.addEventListener('keydown', key, true);
+      document.body.appendChild(w); w.querySelector('.dlg-no').focus();
+    });
   }
 
   /* ---------- theme ---------- */
@@ -316,7 +338,7 @@
   });
 
   function logout() { auth.signOut(); }
-  $('#logoutBtn').addEventListener('click', logout);
+  $('#logoutBtn').addEventListener('click', function () { askLogout().then(function (ok) { if (ok) { toast('You have been logged out.', 'out'); setTimeout(logout, 500); } }); });
   $('#deniedOut').addEventListener('click', logout);
 
   var all = [], unsub = null;

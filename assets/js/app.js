@@ -98,17 +98,56 @@
   }
   function money() { return ''; }
 
-  function toast(msg, icon) {
+  function toast(msg, icon, kind) {
     var box = $('#toasts');
     var el = document.createElement('div');
-    el.className = 'toast';
-    el.innerHTML = svg(icon || '<path d="m4.5 12.5 4.5 4.5L19.5 6.5"/>', 2.2) + '<span>' + msg + '</span>';
+    var warn = kind === 'warn' || (!kind && icon && /M12 (8\.5v4\.5|11v5\.5)/.test(icon));
+    var out = kind === 'out';
+    el.className = 'toast' + (warn ? ' warn' : '') + (out ? ' out' : '');
+    el.setAttribute('role', warn ? 'alert' : 'status');
+    var ico = icon || (out ? '<path d="M9.5 4.5h-3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3M15 8l4 4-4 4M19 12H9.5"/>' : '<path d="m4.5 12.5 4.5 4.5L19.5 6.5"/>');
+    el.innerHTML = '<span class="t-ico">' + svg(ico, 2.2) + '</span><span class="t-msg">' + msg + '</span><i class="t-bar"></i>';
     box.appendChild(el);
-    setTimeout(function () {
-      el.style.transition = 'opacity .3s, transform .3s';
-      el.style.opacity = '0'; el.style.transform = 'translateY(8px)';
+    var gone = function () {
+      el.classList.add('leave');
       setTimeout(function () { el.remove(); }, 320);
-    }, 3400);
+    };
+    el.addEventListener('click', gone);
+    setTimeout(gone, 3800);
+  }
+
+  /* styled confirmation dialog (replaces the browser's plain confirm()) */
+  function askConfirm(o) {
+    return new Promise(function (resolve) {
+      var wrap = document.createElement('div');
+      wrap.className = 'dlg';
+      wrap.setAttribute('role', 'alertdialog'); wrap.setAttribute('aria-modal', 'true');
+      var icons = {
+        out: '<path d="M9.5 4.5h-3a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h3M15 8l4 4-4 4M19 12H9.5"/>',
+        warn: '<path d="M12 8.5v4.5M12 16.4v.2"/><circle cx="12" cy="12" r="8.5"/>'
+      };
+      wrap.innerHTML = '<div class="dlg-card"><span class="dlg-ico' + (o.danger ? ' danger' : '') + '">' + svg(icons[o.icon || 'warn'], 2) + '</span>' +
+        '<h3 class="dlg-t"></h3><p class="dlg-m"></p>' +
+        '<div class="dlg-act"><button type="button" class="btn btn-ghost dlg-no"></button><button type="button" class="btn btn-primary dlg-yes' + (o.danger ? ' danger' : '') + '"></button></div></div>';
+      wrap.querySelector('.dlg-t').textContent = o.title || 'Are you sure?';
+      wrap.querySelector('.dlg-m').textContent = o.text || '';
+      wrap.querySelector('.dlg-no').textContent = o.no || 'Cancel';
+      wrap.querySelector('.dlg-yes').textContent = o.yes || 'Confirm';
+      var prev = document.activeElement;
+      function done(v) {
+        document.removeEventListener('keydown', key, true);
+        wrap.classList.add('leave');
+        setTimeout(function () { wrap.remove(); if (prev && prev.focus) { try { prev.focus(); } catch (e) {} } }, 200);
+        resolve(v);
+      }
+      function key(e) { if (e.key === 'Escape') { e.stopPropagation(); done(false); } }
+      wrap.addEventListener('click', function (e) { if (e.target === wrap) done(false); });
+      wrap.querySelector('.dlg-no').addEventListener('click', function () { done(false); });
+      wrap.querySelector('.dlg-yes').addEventListener('click', function () { done(true); });
+      document.addEventListener('keydown', key, true);
+      document.body.appendChild(wrap);
+      wrap.querySelector('.dlg-no').focus();
+    });
   }
 
   /* ---------------- storage ---------------- */
@@ -432,6 +471,7 @@
     showConfirmation(booking);
     renderCalendar();
     goStep(5);
+    try { localStorage.setItem('cdcc_last', JSON.stringify({ name: $('#fName').value.trim(), phone: $('#fPhone').value.trim(), email: $('#fEmail').value.trim() })); } catch (e) {}
     toast('Request saved — reference ' + ref, '<path d="m4.5 12.5 4.5 4.5L19.5 6.5"/>');
   }
 
@@ -581,6 +621,8 @@
       'SUMMARY:' + b.serviceName + ' — Cebu Dental Care Center',
       'LOCATION:Unit 13\\, R Aboitiz St\\, Cebu City\\, 6000 Cebu',
       'DESCRIPTION:Reference ' + b.ref + ' with ' + b.doctorName + '. Call (032) 253 3206 to confirm or reschedule.',
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Dental appointment tomorrow', 'TRIGGER:-P1D', 'END:VALARM',
+      'BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Dental appointment in 2 hours', 'TRIGGER:-PT2H', 'END:VALARM',
       'END:VEVENT', 'END:VCALENDAR'
     ];
     var blob = new Blob([lines.join('\r\n')], { type: 'text/calendar;charset=utf-8' });
@@ -612,7 +654,19 @@
         (filter ? ' No booking matched that reference or number.' : ' No bookings saved on this device yet.') + '</p>';
       return;
     }
-    host.innerHTML = all.map(function (b) {
+    var nextCard = '';
+    if (!filter) {
+      var nowKey = new Date(); var nk = nowKey.getFullYear() + '-' + String(nowKey.getMonth() + 1).padStart(2, '0') + '-' + String(nowKey.getDate()).padStart(2, '0') + String(nowKey.getHours()).padStart(2, '0') + ':' + String(nowKey.getMinutes()).padStart(2, '0');
+      var up = all.filter(function (b) { return b.status !== 'cancelled' && b.status !== 'completed' && (b.date + b.time) >= nk; })[0];
+      if (up) {
+        var days = Math.round((parseISO(up.date) - new Date(nowKey.getFullYear(), nowKey.getMonth(), nowKey.getDate())) / 86400000);
+        var when = days <= 0 ? 'Today' : days === 1 ? 'Tomorrow' : 'In ' + days + ' days';
+        nextCard = '<div class="next-visit"><span class="nv-badge">' + when + '</span><div><div class="nv-k">Your next visit</div>' +
+          '<div class="nv-t">' + up.serviceName + '</div><div class="nv-m">' + longDate(up.date) + ' · ' + to12(up.time) + '</div></div>' +
+          '<a class="btn btn-soft btn-sm" href="https://www.google.com/maps/search/?api=1&query=Cebu+Dental+Care+Center+Unit+13+R+Aboitiz+St+Cebu+City" target="_blank" rel="noopener">Directions</a></div>';
+      }
+    }
+    host.innerHTML = nextCard + all.map(function (b) {
       var cancelled = b.status === 'cancelled', st = b.status || 'pending';
       return '<div class="my-item">' +
         '<div><div class="mi-t">' + b.serviceName + '<span class="status ' + st + '">' + st + '</span></div>' +
@@ -625,10 +679,12 @@
     }).join('');
     $$('#myList [data-cancel]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        if (!confirm('Cancel this appointment request?')) return;
-        updateBooking(btn.dataset.cancel, { status: 'cancelled' });
-        toast('Appointment cancelled.', '<path d="m4.5 12.5 4.5 4.5L19.5 6.5"/>');
-        renderMyList($('#lookupInput').value.trim()); renderCalendar(); renderAdmin(); renderSlots();
+        askConfirm({ title: 'Cancel this appointment?', text: 'Your request will be cancelled and the time slot released.', yes: 'Yes, cancel it', no: 'Keep it', danger: true }).then(function (ok) {
+          if (!ok) return;
+          updateBooking(btn.dataset.cancel, { status: 'cancelled' });
+          toast('Appointment cancelled.');
+          renderMyList($('#lookupInput').value.trim()); renderCalendar(); renderAdmin(); renderSlots();
+        });
       });
     });
     $$('#myList [data-rebook]').forEach(function (btn) {
@@ -765,6 +821,58 @@
       if (e.key === 'ArrowLeft') { set(wrap.getBoundingClientRect().left + (wrap.getBoundingClientRect().width * (cur - 4) / 100)); e.preventDefault(); }
       if (e.key === 'ArrowRight') { set(wrap.getBoundingClientRect().left + (wrap.getBoundingClientRect().width * (cur + 4) / 100)); e.preventDefault(); }
     });
+  }
+
+
+  /* ---------------- extras: install app, share, back-to-top, remembered details ---------------- */
+  function initExtras() {
+    // remembered details (this device only)
+    try {
+      var last = JSON.parse(localStorage.getItem('cdcc_last') || 'null');
+      if (last) {
+        if (!$('#fName').value && last.name) $('#fName').value = last.name;
+        if (!$('#fPhone').value && last.phone) $('#fPhone').value = last.phone;
+        if (!$('#fEmail').value && last.email) $('#fEmail').value = last.email;
+      }
+    } catch (e) {}
+
+    // back to top
+    var top = $('#toTop');
+    if (top) {
+      var tick = false;
+      window.addEventListener('scroll', function () {
+        if (tick) return; tick = true;
+        requestAnimationFrame(function () { top.classList.toggle('show', window.scrollY > 700); tick = false; });
+      }, { passive: true });
+      top.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    }
+
+    // share this website
+    var sh = $('#shareBtn');
+    if (sh) sh.addEventListener('click', function () {
+      var data = { title: 'Cebu Dental Care Center', text: 'Book a dental appointment at Cebu Dental Care Center, Cebu City.', url: location.origin + '/' };
+      if (navigator.share) { navigator.share(data).catch(function () {}); return; }
+      if (navigator.clipboard) navigator.clipboard.writeText(data.url).then(function () { toast('Link copied — share it with family and friends.'); });
+      else toast(data.url);
+    });
+
+    // install as an app
+    var inst = $('#installBtn'), deferred = null;
+    var standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone;
+    var isiOS = /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
+    if (inst && !standalone) {
+      if (isiOS) inst.classList.remove('hidden');
+      window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; inst.classList.remove('hidden'); });
+      inst.addEventListener('click', function () {
+        if (deferred) {
+          deferred.prompt();
+          deferred.userChoice.then(function () { deferred = null; inst.classList.add('hidden'); });
+        } else if (isiOS) {
+          askConfirm({ title: 'Install on your iPhone', text: 'Tap the Share button in Safari, then choose “Add to Home Screen”. The clinic app will open full screen like any other app.', yes: 'Got it', no: 'Close' });
+        }
+      });
+      window.addEventListener('appinstalled', function () { inst.classList.add('hidden'); toast('App installed. Find Cebu Dental on your home screen.'); });
+    }
   }
 
   /* ---------------- reveal ---------------- */
@@ -1114,7 +1222,11 @@
     $('#authBtn').addEventListener('click', function () {
       var u = currentUser();
       if (u) {
-        if (confirm('Log out of ' + u.email + '?')) { if (fbAuth) fbAuth.signOut(); setSession(null); updateAuthUI(); toast('Logged out.'); }
+        askConfirm({ icon: 'out', title: 'Log out?', text: 'You are signed in as ' + u.email + '. You can log back in any time to see your appointments.', yes: 'Log out', no: 'Stay logged in' }).then(function (ok) {
+          if (!ok) return;
+          if (fbAuth) fbAuth.signOut(); setSession(null); updateAuthUI();
+          toast('You have been logged out. See you soon!', null, 'out');
+        });
       } else openAuth(null);
     });
     $('#authClose').addEventListener('click', closeAuth);
@@ -1264,12 +1376,15 @@
     $('#adExport').addEventListener('click', exportCSV);
     $('#adSeed').addEventListener('click', seedSamples);
     $('#clearAll').addEventListener('click', function () {
-      if (!confirm('Clear all locally saved bookings?')) return;
-      save([]); renderAdmin(); renderCalendar(); renderSlots(); renderMyList('');
-      toast('Demo data cleared.');
+      askConfirm({ title: 'Clear saved bookings?', text: 'This removes all bookings saved in this browser. It cannot be undone.', yes: 'Clear all', no: 'Keep them', danger: true }).then(function (ok) {
+        if (!ok) return;
+        save([]); renderAdmin(); renderCalendar(); renderSlots(); renderMyList('');
+        toast('Demo data cleared.');
+      });
     });
 
     initReveal();
+    initExtras();
     initAuth();
   }
 

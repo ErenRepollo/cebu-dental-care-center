@@ -162,3 +162,65 @@ body{-webkit-tap-highlight-color:transparent}
   .hero .hero-trust:first-of-type .chip{justify-content:flex-start}
 }
 .rev{margin:0;min-width:0;height:100%}
+
+/* ---- confirmations: toasts, dialogs, notices — black & gold ---- */
+.toasts{right:auto;left:50%;transform:translateX(-50%);bottom:auto;top:calc(var(--header-h,72px) + 14px);width:min(92vw,400px);max-width:none;z-index:400;pointer-events:none}
+.toast{pointer-events:auto;position:relative;overflow:hidden;cursor:pointer;gap:12px;padding:13px 16px 15px;border-radius:16px;
+  background:linear-gradient(180deg,#1d1810,#120f09);color:#f7f0de;border:1px solid rgba(227,185,84,.38);
+  box-shadow:0 18px 44px -14px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.4),0 0 28px -8px rgba(227,185,84,.35);
+  font-weight:600;font-size:.88rem;line-height:1.4;animation:tdrop .38s cubic-bezier(.2,.9,.3,1.2) both}
+.toast .t-ico{width:30px;height:30px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;
+  background:linear-gradient(135deg,#f3d683,#c8941f);color:#1b1305}
+.toast .t-ico svg{width:16px;height:16px;color:inherit}
+.toast .t-msg{flex:1;min-width:0}
+.toast .t-bar{position:absolute;left:0;bottom:0;height:3px;width:100%;background:linear-gradient(90deg,#f3d683,#c8941f);transform-origin:left;animation:tbar 3.8s linear forwards}
+.toast.warn{border-color:rgba(248,113,113,.5)}
+.toast.warn .t-ico{background:linear-gradient(135deg,#fca5a5,#dc2626);color:#fff}
+.toast.warn .t-bar{background:linear-gradient(90deg,#fca5a5,#dc2626)}
+.toast.out .t-ico{background:rgba(227,185,84,.14);color:#f3d683;border:1px solid rgba(227,185,84,.5)}
+.toast.leave{opacity:0;transform:translateY(-10px) scale(.97);transition:opacity .3s,transform .3s}
+
+@keyframes tdrop{from{transform:translateY(-16px) scale(.96);opacity:0}to{transform:none;opacity:1}}
+@keyframes tbar{to{transform:scaleX(0)}}
+@media (max-width:760px){ .toasts{left:50%;right:auto;width:calc(100vw - 28px);top:calc(var(--header-h,66px) + 10px)} }
+
+.dlg{position:fixed;inset:0;z-index:500;display:grid;place-items:center;padding:20px;background:rgba(4,3,2,.72);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);animation:dfade .2s ease both}
+.dlg.leave{opacity:0;transition:opacity .2s}
+.dlg-card{width:min(100%,400px);text-align:center;padding:28px 24px 22px;border-radius:24px;
+  background:linear-gradient(180deg,#1d1810,#110e08);border:1px solid rgba(227,185,84,.4);color:#f7f0de;
+  box-shadow:0 40px 90px -20px rgba(0,0,0,.85),0 0 60px -18px rgba(227,185,84,.4);animation:dpop .28s cubic-bezier(.2,.9,.3,1.25) both}
+html:not([data-theme="dark"]) .dlg-card{background:linear-gradient(180deg,#fffdf6,#f6edd3);color:#1a1407;border-color:rgba(168,120,26,.45)}
+.dlg-ico{width:58px;height:58px;margin:0 auto 14px;border-radius:50%;display:grid;place-items:center;
+  background:rgba(227,185,84,.14);border:1px solid rgba(227,185,84,.5);color:#f0c14b}
+html:not([data-theme="dark"]) .dlg-ico{color:#8a6310}
+.dlg-ico svg{width:26px;height:26px}
+.dlg-ico.danger{background:rgba(239,68,68,.12);border-color:rgba(248,113,113,.55);color:#f87171}
+.dlg-t{font-size:1.22rem;letter-spacing:-.02em;margin-bottom:8px}
+.dlg-m{font-size:.9rem;line-height:1.55;color:var(--ink-soft);overflow-wrap:anywhere}
+.dlg-act{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+.dlg-act .btn{width:100%;justify-content:center;padding:13px 12px;font-size:.92rem}
+.btn.danger{background:linear-gradient(135deg,#f87171,#dc2626);color:#fff;box-shadow:0 14px 28px -14px rgba(220,38,38,.8)}
+@media (max-width:380px){ .dlg-act{grid-template-columns:1fr} }
+@keyframes dfade{from{opacity:0}to{opacity:1}}
+@keyframes dpop{from{transform:translateY(14px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+
+/* inline notices inside the login box */
+.notice{border-radius:14px;padding:13px 14px;font-size:.86rem;line-height:1.5;background:rgba(227,185,84,.1);border:1px solid rgba(227,185,84,.4)}
+.notice svg{color:var(--brand)}
+.err-msg.on{display:block;padding:11px 13px;border-radius:12px;background:rgba(239,68,68,.1);border:1px solid rgba(248,113,113,.45);color:#f87171;font-size:.82rem;line-height:1.45;font-weight:600}
+html:not([data-theme="dark"]) .err-msg.on{color:#b91c1c}
+@media (prefers-reduced-motion:reduce){ .toast,.dlg,.dlg-card,.toast .t-bar{animation:none} }
+
+/* ---- extras: back-to-top, next visit card ---- */
+.fab .top{width:50px;height:50px;border-radius:14px;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);color:var(--brand);
+  box-shadow:var(--shadow-md);opacity:0;transform:translateY(10px);pointer-events:none;transition:.25s;height:0;margin-top:-9px;overflow:hidden}
+.fab .top.show{opacity:1;transform:none;pointer-events:auto;height:50px;margin-top:0}
+.fab .top svg{width:20px;height:20px}
+.next-visit{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:16px;margin-bottom:12px;border-radius:18px;
+  background:linear-gradient(135deg,rgba(227,185,84,.16),rgba(227,185,84,.05));border:1px solid rgba(227,185,84,.45)}
+.nv-badge{padding:7px 12px;border-radius:999px;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+  background:linear-gradient(135deg,#f3d683,#c8941f);color:#1b1305}
+.next-visit>div{flex:1;min-width:150px}
+.nv-k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
+.nv-t{font-weight:800;margin-top:2px}
+.nv-m{font-size:.84rem;color:var(--ink-soft);margin-top:2px}
