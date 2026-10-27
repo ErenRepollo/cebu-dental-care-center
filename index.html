@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Cebu Dental Care Center — Gentle Dentistry &amp; Online Appointments</title>
 <meta name="description" content="Book a dental appointment online at Cebu Dental Care Center, Unit 13 R Aboitiz St, Cebu City. 4.8★ from 118 Google reviews. CEREC single-visit crowns, gentle cleanings, bonding, root canals and emergency care. Call (032) 253 3206.">
-<meta name="theme-color" content="#0b5d55">
 <meta property="og:title" content="Cebu Dental Care Center — Gentle Dentistry in Cebu City">
 <meta property="og:description" content="4.8★ (118 reviews). Book online in under a minute — CEREC single-visit crowns, painless cleanings, bonding and emergency dental care.">
 <meta property="og:type" content="website">
@@ -16,9 +15,15 @@
 <link rel="stylesheet" href="assets/css/style_b.css">
 <link rel="stylesheet" href="assets/css/style_c.css">
 <link rel="stylesheet" href="assets/css/style_d.css">
-<link rel="icon" type="image/png" href="assets/img/logo-96.png">
-<link rel="apple-touch-icon" href="assets/img/logo-192.png">
+<link rel="icon" type="image/png" href="/assets/img/logo-96.png">
+<link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#0a0907">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cebu Dental">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="application-name" content="Cebu Dental">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -814,5 +819,10 @@
 <script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
 <script src="assets/js/qr.js"></script>
 <script src="assets/js/app.js"></script>
+<script>
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+}
+</script>
 </body>
 </html>

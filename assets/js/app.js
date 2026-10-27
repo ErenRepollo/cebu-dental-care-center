@@ -26,7 +26,7 @@
   ];
 
   var GALLERY = [
-    { src: 'assets/img/facility-chair.jpg', alt: 'Dental treatment room with modern chair, instrument tray and overhead monitor', cls: 'tall' },
+    { src: 'assets/img/facility-chair.jpg', alt: 'Dental treatment room with modern chair, instrument tray and overhead monitor', cls: '' },
     { src: 'assets/img/smile-result.jpg', alt: 'Patient smiling after dental bonding treatment', cls: 'wide' },
     { src: 'assets/img/patient-blue.jpg', alt: 'Patient standing by the clinic door with the Cebu Dental Care Center sign', cls: '' },
     { src: 'assets/img/teeth-before.jpg', alt: 'Front teeth before bonding, showing a gap', cls: '' },
@@ -35,7 +35,7 @@
     { src: 'assets/img/family-group.jpg', alt: 'Three patients smiling in front of the clinic glass doors', cls: 'wide' },
     { src: 'assets/img/patient-dentist-1.jpg', alt: 'Patient posing with the dentist beside the clinic sign', cls: '' },
     { src: 'assets/img/patient-dentist-2.jpg', alt: 'Patient with the dental team in front of the CEREC sign', cls: '' },
-    { src: 'assets/img/sign-cerec.jpg', alt: 'CEREC single visit dentistry sign on the clinic door', cls: 'tall' }
+    { src: 'assets/img/sign-cerec.jpg', alt: 'CEREC single visit dentistry sign on the clinic door', cls: '' }
   ];
 
   var REVIEWS = [

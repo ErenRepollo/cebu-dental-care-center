@@ -96,3 +96,38 @@ html[data-theme="dark"] .hero::before{background:radial-gradient(closest-side,rg
   .nav{display:none}
   .burger{display:grid}
 }
+
+/* ---- gallery: no empty "holes" ----
+   2 wide + 8 square photos = 12 cells, which fills 4 columns x 3 rows,
+   3 columns x 4 rows and 2 columns x 6 rows. "dense" back-fills any gap. */
+.gal{grid-auto-flow:dense}
+.gal button img{position:absolute;inset:0}
+@media (max-width:760px){
+  .gal .wide{aspect-ratio:2/1}
+}
+
+/* ---- installed-app polish ---- */
+html{background:#0a0907}
+html:not([data-theme="dark"]){background:#faf6ea}
+body{-webkit-tap-highlight-color:transparent}
+@media (display-mode:standalone){
+  html{overscroll-behavior-y:none}
+  a,button{-webkit-touch-callout:none}
+}
+
+/* ---- photos: sharper, no haze, nothing covering the subject ---- */
+.hero-shot::after{display:none}
+.hero-shot img{transform:none;image-rendering:auto}
+.hero-shot{aspect-ratio:4/5}
+.gal button img{object-position:center 28%}
+.tech-media img,.doc-img img{object-position:center 30%}
+@media (max-width:760px){
+  .hero-media{max-width:none;margin-bottom:18px}
+  .hero-shot{aspect-ratio:4/4.6}
+  .float-card.fc-open{left:12px;right:auto;top:-14px;padding:8px 12px}
+  .float-card.fc-rate{right:12px;left:auto;bottom:-16px;padding:8px 12px}
+  .float-card .fc-icon{width:32px;height:32px}
+  .float-card .fc-b{font-size:.84rem}
+  .float-card .fc-t{font-size:.62rem}
+}
+@media (hover:none){ .gal button:hover img{transform:none} }

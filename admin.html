@@ -12,8 +12,15 @@
 <link rel="stylesheet" href="assets/css/style_b.css">
 <link rel="stylesheet" href="assets/css/style_c.css">
 <link rel="stylesheet" href="assets/css/style_d.css">
-<link rel="icon" type="image/png" href="assets/img/logo-96.png">
+<link rel="icon" type="image/png" href="/assets/img/logo-96.png">
+<link rel="manifest" href="/manifest.webmanifest">
 <meta name="theme-color" content="#0a0907">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Cebu Dental">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="application-name" content="Cebu Dental">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <style>
   body{min-height:100vh}
   .adm-wrap{max-width:1180px;margin-inline:auto;padding:0 20px}
@@ -515,6 +522,11 @@
     toast('CSV exported.');
   });
 })();
+</script>
+<script>
+if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+  window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+}
 </script>
 </body>
 </html>
