@@ -224,3 +224,28 @@ html:not([data-theme="dark"]) .err-msg.on{color:#b91c1c}
 .nv-k{font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:800}
 .nv-t{font-weight:800;margin-top:2px}
 .nv-m{font-size:.84rem;color:var(--ink-soft);margin-top:2px}
+
+/* ---- photos always fit their boxes: whole picture shown, soft blurred fill behind ---- */
+.gal{grid-template-columns:repeat(4,1fr)}
+.gal button,.fit{background:#0a0907}
+.gal button::before,.fit::before{content:"";position:absolute;inset:-24px;background:var(--src) center/cover no-repeat;filter:blur(20px) brightness(.62) saturate(1.1);transform:scale(1.1)}
+.gal button img,.fit img{object-fit:contain;object-position:center}
+.fit{position:relative;overflow:hidden}
+.fit img{position:absolute;inset:0;width:100%;height:100%}
+.fit .doc-badge{z-index:2}
+.gal .wide{grid-column:span 2;aspect-ratio:2/1}
+.gal .tall{grid-row:span 2;aspect-ratio:auto}
+.gal button img{transition:none}
+@media (max-width:599px){
+  .gal{grid-template-columns:repeat(2,1fr);gap:10px}
+  .gal .tall{grid-row:span 2;aspect-ratio:auto}
+}
+@media (min-width:600px) and (max-width:1080px){ .gal{grid-template-columns:repeat(4,1fr)} }
+/* other photo boxes sized to the picture */
+.tech-media{aspect-ratio:3/4;max-width:480px;margin-inline:auto}
+.tech-media img{object-fit:cover;object-position:center}
+.hero-shot{aspect-ratio:4/5}
+@media (max-width:760px){ .hero-shot{aspect-ratio:4/5} .tech-media{max-width:none} }
+.ba-wrap{aspect-ratio:3/1}
+@media (max-width:760px){ .ba-wrap{aspect-ratio:2.2/1} }
+.fc-patients img{object-position:center 25%}

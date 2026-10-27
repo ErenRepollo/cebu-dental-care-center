@@ -26,16 +26,16 @@
   ];
 
   var GALLERY = [
-    { src: 'assets/img/facility-chair.jpg', alt: 'Dental treatment room with modern chair, instrument tray and overhead monitor', cls: '' },
     { src: 'assets/img/smile-result.jpg', alt: 'Patient smiling after dental bonding treatment', cls: 'wide' },
+    { src: 'assets/img/facility-chair.jpg', alt: 'Dental treatment room with modern chair, instrument tray and overhead monitor', cls: '' },
     { src: 'assets/img/patient-blue.jpg', alt: 'Patient standing by the clinic door with the Cebu Dental Care Center sign', cls: '' },
-    { src: 'assets/img/teeth-before.jpg', alt: 'Front teeth before bonding, showing a gap', cls: '' },
-    { src: 'assets/img/teeth-after.jpg', alt: 'Front teeth after bonding, gap closed', cls: '' },
+    { src: 'assets/img/teeth-before.jpg', alt: 'Front teeth before bonding, showing a gap', cls: 'wide' },
+    { src: 'assets/img/sign-cerec.jpg', alt: 'CEREC single visit dentistry sign on the clinic door', cls: 'tall' },
     { src: 'assets/img/patient-chair.jpg', alt: 'Patient seated in the dental chair with the dentist in purple scrubs', cls: '' },
-    { src: 'assets/img/family-group.jpg', alt: 'Three patients smiling in front of the clinic glass doors', cls: 'wide' },
-    { src: 'assets/img/patient-dentist-1.jpg', alt: 'Patient posing with the dentist beside the clinic sign', cls: '' },
-    { src: 'assets/img/patient-dentist-2.jpg', alt: 'Patient with the dental team in front of the CEREC sign', cls: '' },
-    { src: 'assets/img/sign-cerec.jpg', alt: 'CEREC single visit dentistry sign on the clinic door', cls: '' }
+    { src: 'assets/img/teeth-after.jpg', alt: 'Front teeth after bonding, gap closed', cls: 'wide' },
+    { src: 'assets/img/family-group.jpg', alt: 'Three patients smiling in front of the clinic glass doors', cls: '' },
+    { src: 'assets/img/patient-dentist-1.jpg', alt: 'Patient posing with the dentist beside the clinic sign', cls: 'wide' },
+    { src: 'assets/img/patient-dentist-2.jpg', alt: 'Patient with the dental team in front of the CEREC sign', cls: 'wide' }
   ];
 
   var REVIEWS = [
@@ -228,7 +228,7 @@
   var lbIndex = 0;
   function renderGallery() {
     $('#galGrid').innerHTML = GALLERY.map(function (g, i) {
-      return '<button class="' + g.cls + '" data-i="' + i + '" aria-label="Open photo: ' + g.alt + '">' +
+      return '<button class="' + g.cls + '" style="--src:url(' + new URL(g.src, document.baseURI).href + ')" data-i="' + i + '" aria-label="Open photo: ' + g.alt + '">' +
         '<img src="' + g.src + '" alt="' + g.alt + '" loading="lazy"></button>';
     }).join('');
     $$('#galGrid button').forEach(function (b) {
