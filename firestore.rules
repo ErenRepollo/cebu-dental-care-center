@@ -9,19 +9,24 @@ service cloud.firestore {
         && request.auth.token.email == 'admin@gmail.com';
     }
 
+    // Google accounts are always verified; email+password accounts must confirm their email first.
+    function verified() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+
     match /bookings/{ref} {
       // a signed-in patient can create their own booking (starts as pending)
-      allow create: if request.auth != null
+      allow create: if verified()
                     && request.resource.data.uid == request.auth.uid
                     && request.resource.data.status == 'pending';
 
       // patients read their own bookings, admin reads all
       allow read: if isAdmin()
-                  || (request.auth != null && resource.data.uid == request.auth.uid);
+                  || (verified() && resource.data.uid == request.auth.uid);
 
       // admin can change anything; a patient can only cancel their own booking
       allow update: if isAdmin()
-                    || (request.auth != null
+                    || (verified()
                         && resource.data.uid == request.auth.uid
                         && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status'])
                         && request.resource.data.status == 'cancelled');

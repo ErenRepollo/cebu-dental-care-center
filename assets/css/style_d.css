@@ -1,0 +1,98 @@
+/* ============================================================
+   Noir & Gold theme — matches the clinic logo (gold tooth on black)
+   Loaded last: re-colours the whole site through the design tokens.
+   ============================================================ */
+:root{
+  --ink:#1a1407; --ink-soft:#4f4429; --muted:#7a6e52;
+  --line:rgba(26,20,7,.12); --line-2:rgba(26,20,7,.07);
+  --bg:#faf6ea; --bg-2:#f3ebd6; --surface:#fffdf6; --surface-2:#fbf5e4;
+  --brand:#8a6310; --brand-2:#a8781a;
+  --mint:#d9ae45; --mint-soft:#f6ead0;
+  --gold:#c8941f;
+  --shadow-sm:0 1px 2px rgba(60,40,0,.07), 0 4px 14px -6px rgba(60,40,0,.16);
+  --shadow-md:0 2px 6px rgba(60,40,0,.06), 0 18px 40px -22px rgba(60,40,0,.32);
+  --shadow-lg:0 30px 80px -40px rgba(60,40,0,.55);
+}
+html[data-theme="dark"]{
+  --ink:#f7f0de; --ink-soft:#d3c8aa; --muted:#a09479;
+  --line:rgba(226,184,86,.18); --line-2:rgba(226,184,86,.09);
+  --bg:#0a0907; --bg-2:#100e0a; --surface:#15120c; --surface-2:#1c1810;
+  --brand:#e3b954; --brand-2:#f3d683;
+  --mint:#e3b954; --mint-soft:rgba(227,185,84,.13);
+  --gold:#f0c14b;
+  --shadow-sm:0 1px 2px rgba(0,0,0,.5);
+  --shadow-md:0 2px 6px rgba(0,0,0,.4), 0 20px 44px -24px rgba(0,0,0,.9);
+  --shadow-lg:0 30px 80px -40px rgba(0,0,0,1);
+}
+::selection{background:rgba(227,185,84,.38);color:inherit}
+html[data-theme="dark"] body{
+  background-image:radial-gradient(900px 520px at 85% -8%,rgba(227,185,84,.10),transparent 62%),radial-gradient(700px 480px at -10% 30%,rgba(227,185,84,.05),transparent 60%);
+  background-attachment:fixed}
+
+/* ---- logo ---- */
+.brand-mark{background:#000;padding:0;overflow:hidden;border:1px solid rgba(227,185,84,.55);
+  box-shadow:0 8px 22px -10px rgba(227,185,84,.55),inset 0 0 0 1px rgba(0,0,0,.6)}
+.brand-mark img{width:100%;height:100%;object-fit:cover;display:block}
+.brand:hover .brand-mark{transform:rotate(-4deg) scale(1.03)}
+.brand-name{letter-spacing:-.02em}
+html[data-theme="dark"] .brand-name{background:linear-gradient(90deg,#f6dc8d,#e3b954 60%,#c99a2e);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ---- gold primary buttons (dark text on gold = readable in both themes) ---- */
+.btn-primary,html[data-theme="dark"] .btn-primary{
+  background:linear-gradient(140deg,#f6dc8d,#dfb24c 52%,#bb8a1e);color:#1b1305;
+  box-shadow:0 10px 26px -12px rgba(201,150,30,.8)}
+.btn-primary:hover{box-shadow:0 18px 34px -16px rgba(201,150,30,.95);filter:brightness(1.04)}
+.btn-soft:hover{background:var(--brand);color:#fff}
+html[data-theme="dark"] .btn-soft:hover{color:#1b1305}
+.skip:focus{color:#1b1305;background:#e3b954}
+.mnav .btn-primary,html[data-theme="dark"] .mnav .btn-primary{color:#1b1305}
+
+/* ---- selected states that used white-on-brand ---- */
+html[data-theme="dark"] .step.active .sn,
+html[data-theme="dark"] .day.sel,
+html[data-theme="dark"] .slot.sel,
+html[data-theme="dark"] .fab .book{color:#1b1305}
+.day.sel{box-shadow:0 8px 18px -10px rgba(201,150,30,.9)}
+.fab .book{background:linear-gradient(140deg,#f6dc8d,#dfb24c 55%,#bb8a1e);color:#1b1305;border-color:transparent}
+
+/* ---- headings: gold accent on the italic words ---- */
+h1 em,h2 em,h1 .serif,h2 .serif{background:linear-gradient(100deg,var(--brand-2),var(--brand) 55%,#b98a22);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+html:not([data-theme="dark"]) h1 em,html:not([data-theme="dark"]) h2 em,html:not([data-theme="dark"]) h1 .serif,html:not([data-theme="dark"]) h2 .serif{background:linear-gradient(100deg,#a8781a,#8a6310 55%,#6e4d08);-webkit-background-clip:text;background-clip:text}
+
+/* ---- cards: fine gold hairline + glow on hover ---- */
+html[data-theme="dark"] .svc,html[data-theme="dark"] .rev,html[data-theme="dark"] .doc,html[data-theme="dark"] .faq-item,html[data-theme="dark"] .float-card{border-color:var(--line)}
+html[data-theme="dark"] .svc:hover,html[data-theme="dark"] .doc:hover{border-color:rgba(227,185,84,.45);box-shadow:0 24px 50px -28px rgba(227,185,84,.35)}
+
+/* ---- CTA band + doctor initials ---- */
+.cta-band{background:linear-gradient(135deg,#120e06,#2a1f0a 55%,#4a3510);color:#f7f0de;border:1px solid rgba(227,185,84,.35)}
+.cta-band .btn-primary{background:linear-gradient(140deg,#f6dc8d,#dfb24c 52%,#bb8a1e);color:#1b1305}
+.doc-img.initials{background:radial-gradient(circle at 30% 20%,rgba(227,185,84,.35),transparent 60%),linear-gradient(155deg,#2b200b,#0d0903)}
+.doc-img.initials span{color:#f3d683}
+.doc-badge{color:#f3d683;background:rgba(10,9,7,.62)}
+.svc-ico.gold{background:rgba(227,185,84,.16);color:var(--brand)}
+
+/* ---- login modal ---- */
+.auth-tabs button.on,html[data-theme="dark"] .auth-tabs button.on{background:linear-gradient(140deg,#f6dc8d,#dfb24c 55%,#bb8a1e);color:#1b1305;box-shadow:0 10px 22px -12px rgba(201,150,30,.9)}
+#authBtn.in,html[data-theme="dark"] #authBtn.in{background:linear-gradient(140deg,#f6dc8d,#dfb24c);color:#1b1305}
+.auth-card{border-color:rgba(227,185,84,.3)}
+.auth-card .auth-logo{display:block;width:64px;height:64px;border-radius:18px;margin:0 0 14px;border:1px solid rgba(227,185,84,.55);box-shadow:0 12px 28px -14px rgba(227,185,84,.7)}
+.adm-card .auth-logo{display:block;width:64px;height:64px;border-radius:18px;margin:0 0 14px;border:1px solid rgba(227,185,84,.55)}
+
+/* ---- soft gold glow in the hero (the old teal blob looked like a hard block on black) ---- */
+.hero::before{background:radial-gradient(closest-side,rgba(217,174,69,.30),transparent);filter:none}
+html[data-theme="dark"] .hero::before{background:radial-gradient(closest-side,rgba(227,185,84,.20),transparent)}
+.hero::after{background:radial-gradient(closest-side,rgba(227,185,84,.10),transparent)}
+
+/* keep the desktop header inside its container on mid-size screens */
+.brand{flex:0 1 auto}
+@media (min-width:1241px){
+  .header-in{gap:12px}
+  .nav a{padding:9px 9px;font-size:.86rem}
+  .header-actions{margin-left:0}
+}
+
+/* the full nav needs ~1240px; below that the hamburger menu takes over (so the clinic name is never cut) */
+@media (max-width:1240px){
+  .nav{display:none}
+  .burger{display:grid}
+}

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,7 +11,9 @@
 <link rel="stylesheet" href="assets/css/style_a.css">
 <link rel="stylesheet" href="assets/css/style_b.css">
 <link rel="stylesheet" href="assets/css/style_c.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%230b5d55'/><path d='M50 26c-9 0-14 5-14 13 0 6 2 9 2 15 0 9 3 20 7 20 3 0 3-9 5-9s2 9 5 9c4 0 7-11 7-20 0-6 2-9 2-15 0-8-5-13-14-13z' fill='%23eafff9'/></svg>">
+<link rel="stylesheet" href="assets/css/style_d.css">
+<link rel="icon" type="image/png" href="assets/img/logo-96.png">
+<meta name="theme-color" content="#0a0907">
 <style>
   body{min-height:100vh}
   .adm-wrap{max-width:1180px;margin-inline:auto;padding:0 20px}
@@ -112,6 +114,7 @@
 
 <div class="adm-gate hidden" id="gateLogin">
   <div class="adm-card">
+    <img class="auth-logo" src="assets/img/logo-96.png" alt="" width="64" height="64">
     <div class="adm-eyebrow"><i></i>Staff only</div>
     <h1>Admin <span class="serif">sign in</span></h1>
     <p>Log in with the clinic admin account to see today's schedule and booking requests.</p>
@@ -140,9 +143,7 @@
   <header class="adm-top">
     <div class="adm-wrap">
       <div class="adm-brand">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5.5c-2.6 0-4 1.5-4 3.9 0 1.7.6 2.6.6 4.3 0 2.6.8 5.8 2 5.8.9 0 .9-2.6 1.4-2.6s.5 2.6 1.4 2.6c1.2 0 2-3.2 2-5.8 0-1.7.6-2.6.6-4.3 0-2.4-1.4-3.9-4-3.9Z"/><path d="M9.2 7.6c.7-.5 1.6-.7 2.8-.7"/></svg>
-        </span>
+        <span class="brand-mark" aria-hidden="true"><img src="assets/img/logo-96.png" alt="" width="42" height="42"></span>
         <div><b>Cebu Dental Care Center<span class="adm-pill">Admin</span></b></div>
       </div>
       <div class="adm-actions">
@@ -257,8 +258,7 @@
   (function () {
     var saved = null;
     try { saved = localStorage.getItem('cdcc_theme'); } catch (e) {}
-    if (!saved && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) saved = 'dark';
-    document.documentElement.setAttribute('data-theme', saved || 'light');
+    document.documentElement.setAttribute('data-theme', saved || 'dark');
   })();
   $('#themeBtn').addEventListener('click', function () {
     var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';

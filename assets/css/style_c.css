@@ -115,3 +115,49 @@ html[data-theme="dark"] #authBtn.in{color:#03211d}
 .status.confirmed{background:var(--mint-soft);color:var(--brand)}
 .status.completed{background:rgba(100,116,139,.16);color:#475569}
 html[data-theme="dark"] .status.completed{color:#cbd5e1}
+
+/* ---------- mobile header + hamburger menu: balanced, compact ---------- */
+@media (max-width:1240px){
+  .brand{flex:1 1 auto}
+  .header-in{gap:10px}
+  .header-actions{margin-left:auto;gap:8px}
+  .burger{width:40px;height:40px;transition:.2s}
+  body.menu-open .burger{background:var(--mint-soft);border-color:var(--brand)}
+
+  .mnav{padding:6px 20px 18px;border-radius:0 0 22px 22px;max-height:calc(100vh - var(--header-h) - 10px);overflow-y:auto}
+  /* rows: label on the left, chevron on the right, so the panel is filled edge to edge */
+  .mnav a{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;padding:10px 2px;font-size:.95rem;line-height:1.3}
+  .mnav a:not(.btn)::after{content:"";width:8px;height:8px;flex:0 0 auto;margin-right:4px;border-top:2px solid var(--muted);border-right:2px solid var(--muted);transform:rotate(45deg);transition:.2s}
+  .mnav a:not(.btn):hover,.mnav a:not(.btn):active{color:var(--brand)}
+  .mnav a:not(.btn):hover::after{border-color:var(--brand);transform:translateX(3px) rotate(45deg)}
+  .mnav a:nth-last-child(2){border-bottom:0}
+  /* call button: content centred (the old display:block pushed it to the left) */
+  .mnav .btn{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;min-height:50px;margin-top:12px;padding:13px 18px;border-bottom:0;font-size:.98rem;text-align:center}
+}
+@media (max-width:760px){
+  :root{--header-h:62px}
+  .brand-mark{width:38px;height:38px;border-radius:12px}
+}
+
+/* call button text colour (".mnav a" was overriding the primary button colour) */
+.mnav .btn-primary{color:#fff}
+html[data-theme="dark"] .mnav .btn-primary{color:#03211d}
+
+/* header never overlaps: the name shrinks / wraps instead of running under the buttons */
+.brand{flex:0 0 auto}
+.brand-txt{display:block;min-width:0}
+.brand-name,.brand-sub{display:block;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:480px){
+  .header-in{gap:8px;width:min(100% - 28px,var(--max))}
+  .header-actions{gap:6px}
+  .icon-btn,.burger{width:38px;height:38px}
+  .brand{gap:9px}
+  .brand-mark{width:36px;height:36px;border-radius:11px}
+  .brand-name{font-size:.86rem;letter-spacing:-.02em}
+  .brand-sub{font-size:.62rem;letter-spacing:.1em}
+  .mnav{padding-left:14px;padding-right:14px}
+}
+@media (max-width:400px){
+  .brand-name{white-space:normal;line-height:1.12;overflow:visible;text-overflow:clip}
+  .brand-sub{display:none}
+}

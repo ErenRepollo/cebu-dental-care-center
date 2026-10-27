@@ -23,6 +23,13 @@ Tapos **Redeploy**. Huwag ilagay ang API key sa kahit anong file ng website.
 ## 4. Firebase Authorized domains
 Authentication → Settings → Authorized domains → idagdag ang domain ng Vercel.
 
+## 4b. Email confirmation sa bagong account
+- Ang manual na Create account ay nagpapadala ng confirmation link sa email ng pasyente. Hindi siya awtomatikong naka-login; kailangan niyang i-click ang link, tapos mag-**Log in**.
+- Google login: awtomatiko pa rin (verified na ang Google email).
+- Firebase Console → Authentication → Templates → **Email address verification**: palitan ang Sender name / Subject / Message.
+- (Optional) Templates → **SMTP settings**: ikabit ang Brevo SMTP (host `smtp-relay.brevo.com`, port 587, SMTP login at SMTP key mula sa Brevo) para galing sa clinic email ang padala at mas kaunti ang mapunta sa spam.
+- I-publish ulit ang `firestore.rules` (may dagdag na email-verified na check).
+
 ## 5. Subukan
 1. Mag-login bilang pasyente → mag-book → makikita ang receipt na may QR, **Save receipt**, **Add to Google Calendar**.
 2. Mag-login bilang `admin@gmail.com` → mapupunta sa `admin.html`.
